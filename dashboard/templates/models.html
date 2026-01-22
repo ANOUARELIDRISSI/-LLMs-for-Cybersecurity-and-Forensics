@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}Models - Advanced LLMs Cybersecurity{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">
+        <i class="fas fa-brain me-2"></i>
+        Model Management
+    </h1>
+    <div>
+        <button class="btn btn-success me-2" onclick="trainNewModel()">
+            <i class="fas fa-plus me-1"></i>
+            Train New Model
+        </button>
+        <button class="btn btn-primary" onclick="refreshModels()">
+            <i class="fas fa-sync-alt me-1"></i>
+            Refresh
+        </button>
+    </div>
+</div>
+
+<!-- Training Status -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-bar me-2"></i>
+                Training Overview
+            </div>
+            <div class="card-body">
+                <div class="row" id="training-overview">
+                    <!-- Training metrics will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Model Performance Comparison -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-line me-2"></i>
+                Model Performance Comparison
+            </h5>
+            <div id="model-performance-chart" style="height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Trained Models Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-list me-2"></i>
+                Trained Models
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Model Name</th>
+                                <th>Task Type</th>
+                                <th>Architecture</th>
+                                <th>Training Loss</th>
+                                <th>Validation Loss</th>
+                                <th>Accuracy</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="models-table-body">
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                    Loading models...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Model Architecture Details -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cogs me-2"></i>
+                Architecture Details
+            </div>
+            <div class="card-body">
+                <div id="architecture-details">
+                    <div class="text-center text-muted">
+                        Select a model to view architecture details
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-pie me-2"></i>
+                Training Configuration
+            </div>
+            <div class="card-body">
+                <div id="training-config">
+                    <div class="text-center text-muted">
+                        Select a model to view training configuration
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Training Modal -->
+<div class="modal fade" id="trainingModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-cogs me-2"></i>
+                    Train New Model
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="training-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Task Type</label>
+                                <select class="form-select" name="task_type" required>
+                                    <option value="">Select task type</option>
+                                    <option value="threat_detection">Threat Detection</option>
+                                    <option value="log_classification">Log Classification</option>
+                                    <option value="vulnerability_severity">Vulnerability Severity</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Base Model</label>
+                                <select class="form-select" name="model_name" required>
+                                    <option value="distilbert-base-uncased">DistilBERT Base</option>
+                                    <option value="bert-base-uncased">BERT Base</option>
+                                    <option value="roberta-base">RoBERTa Base</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Batch Size</label>
+                                <input type="number" class="form-control" name="batch_size" value="8" min="1" max="32">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Learning Rate</label>
+                                <input type="number" class="form-control" name="learning_rate" value="0.00002" step="0.00001">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Epochs</label>
+                                <input type="number" class="form-control" name="num_epochs" value="3" min="1" max="10">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="startTraining()">
+                    <i class="fas fa-play me-1"></i>
+                    Start Training
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let modelsData = {};
+
+function refreshModels() {
+    loadTrainingMetrics();
+    loadModelPerformanceChart();
+}
+
+function loadTrainingMetrics() {
+    fetch('/api/training-metrics')
+        .then(response => response.json())
+        .then(data => {
+            modelsData = data;
+            updateTrainingOverview(data);
+            updateModelsTable(data);
+        })
+        .catch(error => console.error('Error loading training metrics:', error));
+}
+
+function updateTrainingOverview(data) {
+    const container = document.getElementById('training-overview');
+    
+    if (!data.results) {
+        container.innerHTML = '<div class="col-12 text-center text-muted">No training data available</div>';
+        return;
+    }
+    
+    const results = data.results;
+    const totalModels = Object.keys(results).length;
+    const successfulModels = Object.keys(results).filter(key => !results[key].error).length;
+    const avgAccuracy = Object.values(results)
+        .filter(r => r.eval_accuracy)
+        .reduce((sum, r) => sum + r.eval_accuracy, 0) / successfulModels || 0;
+    
+    const html = `
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h3 text-primary">${totalModels}</div>
+                <div class="text-muted">Total Models</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h3 text-success">${successfulModels}</div>
+                <div class="text-muted">Successful</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h3 text-warning">${totalModels - successfulModels}</div>
+                <div class="text-muted">Failed</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h3 text-info">${(avgAccuracy * 100).toFixed(1)}%</div>
+                <div class="text-muted">Avg Accuracy</div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+function updateModelsTable(data) {
+    const tbody = document.getElementById('models-table-body');
+    
+    if (!data.results) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">No models available</td></tr>';
+        return;
+    }
+    
+    let html = '';
+    
+    Object.entries(data.results).forEach(([taskType, result]) => {
+        const status = result.error ? 'Failed' : 'Trained';
+        const statusClass = result.error ? 'danger' : 'success';
+        
+        html += `
+            <tr onclick="selectModel('${taskType}')" style="cursor: pointer;">
+                <td><strong>${taskType.replace('_', ' ')}</strong></td>
+                <td>${taskType.replace('_', ' ').toUpperCase()}</td>
+                <td>${data.config?.model_name || 'N/A'}</td>
+                <td>${result.training_loss ? result.training_loss.toFixed(4) : 'N/A'}</td>
+                <td>${result.eval_loss ? result.eval_loss.toFixed(4) : 'N/A'}</td>
+                <td>${result.eval_accuracy ? (result.eval_accuracy * 100).toFixed(2) + '%' : 'N/A'}</td>
+                <td><span class="badge bg-${statusClass}">${status}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="event.stopPropagation(); evaluateModel('${taskType}')">
+                        <i class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); deleteModel('${taskType}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    tbody.innerHTML = html;
+}
+
+function selectModel(taskType) {
+    const result = modelsData.results[taskType];
+    
+    // Update architecture details
+    const archContainer = document.getElementById('architecture-details');
+    archContainer.innerHTML = `
+        <h6>Model Architecture</h6>
+        <ul class="list-unstyled">
+            <li><strong>Base Model:</strong> ${modelsData.config?.model_name || 'N/A'}</li>
+            <li><strong>Task:</strong> ${taskType.replace('_', ' ')}</li>
+            <li><strong>Labels:</strong> ${result.num_labels || 'N/A'}</li>
+            <li><strong>Parameters:</strong> ~${estimateParameters(modelsData.config?.model_name)}</li>
+        </ul>
+    `;
+    
+    // Update training config
+    const configContainer = document.getElementById('training-config');
+    configContainer.innerHTML = `
+        <h6>Training Configuration</h6>
+        <ul class="list-unstyled">
+            <li><strong>Batch Size:</strong> ${modelsData.config?.batch_size || 'N/A'}</li>
+            <li><strong>Learning Rate:</strong> ${modelsData.config?.learning_rate || 'N/A'}</li>
+            <li><strong>Epochs:</strong> ${modelsData.config?.num_epochs || 'N/A'}</li>
+            <li><strong>Train Samples:</strong> ${result.train_samples || 'N/A'}</li>
+            <li><strong>Val Samples:</strong> ${result.val_samples || 'N/A'}</li>
+        </ul>
+    `;
+}
+
+function estimateParameters(modelName) {
+    const paramCounts = {
+        'distilbert-base-uncased': '66M',
+        'bert-base-uncased': '110M',
+        'roberta-base': '125M'
+    };
+    return paramCounts[modelName] || 'Unknown';
+}
+
+function loadModelPerformanceChart() {
+    fetch('/api/training-progress-chart')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                Plotly.newPlot('model-performance-chart', data.data, data.layout, {responsive: true});
+            }
+        })
+        .catch(error => console.error('Error loading performance chart:', error));
+}
+
+function trainNewModel() {
+    const modal = new bootstrap.Modal(document.getElementById('trainingModal'));
+    modal.show();
+}
+
+function startTraining() {
+    const form = document.getElementById('training-form');
+    const formData = new FormData(form);
+    
+    const config = {
+        task_type: formData.get('task_type'),
+        model_name: formData.get('model_name'),
+        batch_size: parseInt(formData.get('batch_size')),
+        learning_rate: parseFloat(formData.get('learning_rate')),
+        num_epochs: parseInt(formData.get('num_epochs'))
+    };
+    
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('trainingModal')).hide();
+    
+    // Show loading
+    showLoading('Starting model training...');
+    
+    fetch('/api/train-model', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(config)
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            showAlert('Model training started successfully!', 'success');
+            refreshModels();
+        } else {
+            showAlert('Training failed: ' + data.error, 'danger');
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        showAlert('Error starting training: ' + error, 'danger');
+    });
+}
+
+function evaluateModel(taskType) {
+    showAlert('Model evaluation feature coming soon!', 'info');
+}
+
+function deleteModel(taskType) {
+    if (confirm(`Delete model for ${taskType}? This action cannot be undone.`)) {
+        showAlert('Model deletion feature coming soon!', 'info');
+    }
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    refreshModels();
+});
+</script>
+{% endblock %}

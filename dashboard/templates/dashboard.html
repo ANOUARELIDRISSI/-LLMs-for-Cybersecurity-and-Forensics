@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Advanced LLMs Cybersecurity{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">
+        <i class="fas fa-tachometer-alt me-2"></i>
+        Cybersecurity LLM Dashboard
+    </h1>
+    <div>
+        <button class="btn btn-primary me-2" onclick="refreshData()">
+            <i class="fas fa-sync-alt me-1"></i>
+            Refresh
+        </button>
+        <span class="badge bg-success" id="last-updated">
+            <i class="fas fa-clock me-1"></i>
+            Loading...
+        </span>
+    </div>
+</div>
+
+<!-- System Status Overview -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-server me-2"></i>
+                System Status Overview
+            </div>
+            <div class="card-body">
+                <div class="row" id="system-status">
+                    <!-- Status cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="metric-value text-primary" id="threats-detected">-</div>
+            <div class="metric-label">Threats Detected</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="metric-value text-success" id="incidents-resolved">-</div>
+            <div class="metric-label">Incidents Resolved</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="metric-value text-warning" id="models-trained">-</div>
+            <div class="metric-label">Models Trained</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="metric-value text-info" id="automation-rate">-</div>
+            <div class="metric-label">Automation Rate</div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 1 -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Threat Distribution
+            </h5>
+            <div id="threat-distribution-chart" style="height: 400px;"></div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-robot me-2"></i>
+                SOC Automation Metrics
+            </h5>
+            <div id="soc-metrics-chart" style="height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2 -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="mb-3">
+                <i class="fas fa-chart-line me-2"></i>
+                Model Training Progress
+            </h5>
+            <div id="training-progress-chart" style="height: 500px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-history me-2"></i>
+                Recent Threats
+            </div>
+            <div class="card-body">
+                <div id="recent-threats">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Loading recent threats...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cogs me-2"></i>
+                System Logs
+            </div>
+            <div class="card-body">
+                <div id="system-logs">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Loading system logs...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let systemData = {};
+
+function refreshData() {
+    loadSystemStatus();
+    loadThreatAnalytics();
+    loadSOCAnalytics();
+    loadTrainingMetrics();
+    loadCharts();
+    
+    document.getElementById('last-updated').innerHTML = 
+        '<i class="fas fa-clock me-1"></i>Updated: ' + new Date().toLocaleTimeString();
+}
+
+function loadSystemStatus() {
+    fetch('/api/system-status')
+        .then(response => response.json())
+        .then(data => {
+            systemData = data;
+            updateSystemStatus(data);
+        })
+        .catch(error => console.error('Error loading system status:', error));
+}
+
+function updateSystemStatus(data) {
+    const statusContainer = document.getElementById('system-status');
+    const modules = data.modules || {};
+    
+    let html = '';
+    
+    Object.keys(modules).forEach(module => {
+        const status = modules[module];
+        const statusClass = status.status === 'active' ? 'status-active' : 
+                           status.status === 'error' ? 'status-inactive' : 'status-warning';
+        
+        html += `
+            <div class="col-md-3 mb-3">
+                <div class="d-flex align-items-center">
+                    <span class="status-indicator ${statusClass}"></span>
+                    <div>
+                        <div class="fw-bold">${module.replace('_', ' ').toUpperCase()}</div>
+                        <small class="text-muted">${status.status}</small>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    statusContainer.innerHTML = html;
+}
+
+function loadThreatAnalytics() {
+    fetch('/api/threat-analytics')
+        .then(response => response.json())
+        .then(data => {
+            if (data.summary) {
+                document.getElementById('threats-detected').textContent = 
+                    data.summary.total_analyzed || 0;
+            }
+            updateRecentThreats(data);
+        })
+        .catch(error => console.error('Error loading threat analytics:', error));
+}
+
+function loadSOCAnalytics() {
+    fetch('/api/soc-analytics')
+        .then(response => response.json())
+        .then(data => {
+            if (data.summary) {
+                document.getElementById('incidents-resolved').textContent = 
+                    data.summary.total_incidents || 0;
+            }
+            if (data.automation_metrics) {
+                document.getElementById('automation-rate').textContent = 
+                    data.automation_metrics.workload_reduction || '0%';
+            }
+        })
+        .catch(error => console.error('Error loading SOC analytics:', error));
+}
+
+function loadTrainingMetrics() {
+    fetch('/api/training-metrics')
+        .then(response => response.json())
+        .then(data => {
+            if (data.results) {
+                const trainedModels = Object.keys(data.results).filter(
+                    key => data.results[key].status !== 'failed'
+                ).length;
+                document.getElementById('models-trained').textContent = trainedModels;
+            }
+        })
+        .catch(error => console.error('Error loading training metrics:', error));
+}
+
+function loadCharts() {
+    // Load threat distribution chart
+    fetch('/api/threat-distribution-chart')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                Plotly.newPlot('threat-distribution-chart', data.data, data.layout, {responsive: true});
+            }
+        })
+        .catch(error => console.error('Error loading threat chart:', error));
+    
+    // Load SOC metrics chart
+    fetch('/api/soc-metrics-chart')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                Plotly.newPlot('soc-metrics-chart', data.data, data.layout, {responsive: true});
+            }
+        })
+        .catch(error => console.error('Error loading SOC chart:', error));
+    
+    // Load training progress chart
+    fetch('/api/training-progress-chart')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                Plotly.newPlot('training-progress-chart', data.data, data.layout, {responsive: true});
+            }
+        })
+        .catch(error => console.error('Error loading training chart:', error));
+}
+
+function updateRecentThreats(data) {
+    const container = document.getElementById('recent-threats');
+    
+    if (!data.high_risk_items || data.high_risk_items.length === 0) {
+        container.innerHTML = '<div class="text-muted">No high-risk threats detected</div>';
+        return;
+    }
+    
+    let html = '';
+    data.high_risk_items.slice(0, 5).forEach(threat => {
+        html += `
+            <div class="border-bottom pb-2 mb-2">
+                <div class="d-flex justify-content-between">
+                    <strong>${threat.threat_type}</strong>
+                    <span class="badge bg-danger">${threat.threat_score.toFixed(3)}</span>
+                </div>
+                <small class="text-muted">${threat.text_preview}</small>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    refreshData();
+});
+
+// Make refreshData available globally
+window.refreshData = refreshData;
+</script>
+{% endblock %}

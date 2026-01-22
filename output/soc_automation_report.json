@@ -1,0 +1,32 @@
+{
+  "summary": {
+    "total_incidents": 1,
+    "total_events": 8,
+    "automation_rate": 0.7,
+    "avg_events_per_incident": 8.0
+  },
+  "threat_distribution": {
+    "CRITICAL": 1
+  },
+  "automation_metrics": {
+    "automated_actions": 7,
+    "manual_actions": 3,
+    "workload_reduction": "70.0%"
+  },
+  "incidents": [
+    {
+      "incident_id": "INC_20260122_0001",
+      "threat_level": "CRITICAL",
+      "event_count": 8,
+      "automated_actions": 7,
+      "status": "open",
+      "analyst_notes": "Incident involves 8 correlated events. Event types: unknown, authentication. Events occurred over 0:06:00. Key indicators: IP: 10.0.0.50, File: C:\\temp\\malicious.exe, Process: malicious.exe, IP: 192.168.1.100. Recommended: Review full logs, validate automated actions, investigate root cause"
+    }
+  ],
+  "recommendations": [
+    "Continue monitoring automated response effectiveness",
+    "Review false positive rates and adjust thresholds",
+    "Enhance correlation rules based on incident patterns",
+    "Provide analyst training on new automation features"
+  ]
+}

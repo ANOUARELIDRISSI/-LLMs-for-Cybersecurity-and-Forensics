@@ -1,0 +1,117 @@
+{
+  "case_info": {
+    "timeline_id": "timeline_20260122_230945",
+    "incident_type": "process",
+    "start_time": "2026-01-22T21:09:45.837856",
+    "end_time": "2026-01-22T22:09:45.837856",
+    "duration": "1:00:00",
+    "total_evidence": 4
+  },
+  "executive_summary": "Incident timeline spanning 1:00:00 with 4 pieces of evidence. Evidence types: process, network, file_system. Key events: 21:09:45 - system_log; 21:24:45 - network_log; 21:39:45 - file_system;",
+  "evidence_analysis": {
+    "by_type": {
+      "process": 2,
+      "network": 1,
+      "file_system": 1
+    },
+    "by_source": {
+      "system_log": 2,
+      "network_log": 1,
+      "file_system": 1
+    },
+    "confidence_distribution": {}
+  },
+  "timeline_events": [
+    {
+      "timestamp": "2026-01-22T21:09:45.837856",
+      "evidence_id": "EV001",
+      "source": "system_log",
+      "type": "process",
+      "summary": "Process malware.exe started with PID 1234 at 14:30:15",
+      "confidence": 0.0
+    },
+    {
+      "timestamp": "2026-01-22T21:24:45.837856",
+      "evidence_id": "EV002",
+      "source": "network_log",
+      "type": "network",
+      "summary": "Outbound connection to suspicious IP 192.168.1.100:8080",
+      "confidence": 0.0
+    },
+    {
+      "timestamp": "2026-01-22T21:39:45.837856",
+      "evidence_id": "EV003",
+      "source": "file_system",
+      "type": "file_system",
+      "summary": "File C:\\temp\\sensitive_data.txt accessed and modified",
+      "confidence": 0.0
+    },
+    {
+      "timestamp": "2026-01-22T22:09:45.837856",
+      "evidence_id": "EV004",
+      "source": "system_log",
+      "type": "process",
+      "summary": "Process malware.exe terminated with exit code 0",
+      "confidence": 0.0
+    }
+  ],
+  "correlations": {
+    "EV001": [
+      "EV002",
+      "EV003",
+      "EV004"
+    ],
+    "EV002": [
+      "EV001",
+      "EV003",
+      "EV004"
+    ],
+    "EV003": [
+      "EV001",
+      "EV002",
+      "EV004"
+    ],
+    "EV004": [
+      "EV001",
+      "EV002",
+      "EV003"
+    ]
+  },
+  "chain_of_custody": [
+    {
+      "evidence_id": "EV001",
+      "timestamp": "2026-01-22 23:09:45.837856",
+      "action": "evidence_added",
+      "handler": "ForensicLLM_System",
+      "hash": "0d03fa417ee405585b8658c12310cb716216c42d89606ed3f8f27aa365455273"
+    },
+    {
+      "evidence_id": "EV002",
+      "timestamp": "2026-01-22 23:09:45.837856",
+      "action": "evidence_added",
+      "handler": "ForensicLLM_System",
+      "hash": "93649e13f81eb6df1c3dceed7ca233149a5d67dace527ad85d7c00a40605dd11"
+    },
+    {
+      "evidence_id": "EV003",
+      "timestamp": "2026-01-22 23:09:45.837856",
+      "action": "evidence_added",
+      "handler": "ForensicLLM_System",
+      "hash": "b70f4110e2d011f6f746fbec965ddc19a7a32a372e342736a020ed51f75c5d18"
+    },
+    {
+      "evidence_id": "EV004",
+      "timestamp": "2026-01-22 23:09:45.837856",
+      "action": "evidence_added",
+      "handler": "ForensicLLM_System",
+      "hash": "7522b9ed71f92524706e91cf37ed2166caaa5aec757267826335abc754e8e132"
+    }
+  ],
+  "recommendations": [
+    "Analyze process memory dumps for malicious code",
+    "Review system startup programs and services",
+    "Preserve all evidence with proper chain of custody",
+    "Document all analysis steps and findings",
+    "Consider additional data sources for comprehensive analysis"
+  ]
+}
