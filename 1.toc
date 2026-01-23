@@ -1,4 +1,4 @@
-\babel@toc {english}{}\relax 
+\babel@toc {french}{}\relax 
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Background and Motivation}{3}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Research Objectives}{3}{subsection.1.2}%
@@ -11,7 +11,7 @@
 \contentsline {subsection}{\numberline {3.2}Core Components}{5}{subsection.3.2}%
 \contentsline {subsubsection}{\numberline {3.2.1}Threat Detection Module}{5}{subsubsection.3.2.1}%
 \contentsline {subsubsection}{\numberline {3.2.2}Digital Forensics Module}{5}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}SOC Automation Module}{6}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.3}SOC Automation Module}{5}{subsubsection.3.2.3}%
 \contentsline {subsubsection}{\numberline {3.2.4}Security Challenges Module}{6}{subsubsection.3.2.4}%
 \contentsline {section}{\numberline {4}Implementation Details}{6}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Technology Stack}{6}{subsection.4.1}%
@@ -21,7 +21,7 @@
 \contentsline {subsection}{\numberline {4.3}Dataset Management}{8}{subsection.4.3}%
 \contentsline {section}{\numberline {5}Web Dashboard Implementation}{8}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Dashboard Overview}{8}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Dataset Management Interface}{9}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.2}Dataset Management Interface}{8}{subsection.5.2}%
 \contentsline {subsection}{\numberline {5.3}Threat Analytics and SOC Metrics}{9}{subsection.5.3}%
 \contentsline {subsection}{\numberline {5.4}Model Training Progress}{9}{subsection.5.4}%
 \contentsline {subsection}{\numberline {5.5}Model Performance Comparison}{10}{subsection.5.5}%
