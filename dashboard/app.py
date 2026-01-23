@@ -16,14 +16,6 @@ import plotly.graph_objs as go
 import plotly.utils
 from plotly.subplots import make_subplots
 
-# Add src to path for imports
-sys.path.append(str(Path(__file__).parent.parent / "src"))
-
-from threat_detection.main import ThreatDetector
-from digital_forensics.main import ForensicLLM
-from soc_automation.main import SOCAutomation
-from security_challenges.main import SecurityFramework
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cybersec-llm-dashboard-2024'
 
@@ -35,9 +27,9 @@ class DashboardDataManager:
     """Manages data for the dashboard."""
     
     def __init__(self):
-        self.output_dir = Path("../output")
-        self.models_dir = Path("../models")
-        self.data_dir = Path("../data")
+        self.output_dir = Path("output")  # Fixed path - remove ../
+        self.models_dir = Path("models")   # Fixed path - remove ../
+        self.data_dir = Path("data")       # Fixed path - remove ../
         
     def get_system_status(self):
         """Get overall system status."""
@@ -143,7 +135,11 @@ class DashboardDataManager:
     
     def get_training_metrics(self):
         """Get model training metrics."""
-        training_file = self.models_dir / "training_summary.json"
+        # Try output directory first, then models directory
+        training_file = self.output_dir / "training_summary.json"
+        if not training_file.exists():
+            training_file = self.models_dir / "training_summary.json"
+            
         if training_file.exists():
             try:
                 with open(training_file, 'r') as f:
@@ -163,177 +159,220 @@ def dashboard():
 @app.route('/api/system-status')
 def system_status():
     """API endpoint for system status."""
-    return jsonify(data_manager.get_system_status())
+    try:
+        return jsonify(data_manager.get_system_status())
+    except Exception as e:
+        logger.error(f"Error in system-status endpoint: {e}")
+        return jsonify({"error": "Failed to load system status", "modules": {}})
 
 @app.route('/api/threat-analytics')
 def threat_analytics():
     """API endpoint for threat detection analytics."""
-    return jsonify(data_manager.get_threat_analytics())
+    try:
+        return jsonify(data_manager.get_threat_analytics())
+    except Exception as e:
+        logger.error(f"Error in threat-analytics endpoint: {e}")
+        return jsonify({"error": "Failed to load threat analytics", "summary": {}})
 
 @app.route('/api/forensics-analytics')
 def forensics_analytics():
     """API endpoint for forensics analytics."""
-    return jsonify(data_manager.get_forensics_analytics())
+    try:
+        return jsonify(data_manager.get_forensics_analytics())
+    except Exception as e:
+        logger.error(f"Error in forensics-analytics endpoint: {e}")
+        return jsonify({"error": "Failed to load forensics analytics"})
 
 @app.route('/api/soc-analytics')
 def soc_analytics():
     """API endpoint for SOC analytics."""
-    return jsonify(data_manager.get_soc_analytics())
+    try:
+        return jsonify(data_manager.get_soc_analytics())
+    except Exception as e:
+        logger.error(f"Error in soc-analytics endpoint: {e}")
+        return jsonify({"error": "Failed to load SOC analytics", "summary": {}, "automation_metrics": {}})
 
 @app.route('/api/security-analytics')
 def security_analytics():
     """API endpoint for security analytics."""
-    return jsonify(data_manager.get_security_analytics())
+    try:
+        return jsonify(data_manager.get_security_analytics())
+    except Exception as e:
+        logger.error(f"Error in security-analytics endpoint: {e}")
+        return jsonify({"error": "Failed to load security analytics"})
 
 @app.route('/api/training-metrics')
 def training_metrics():
     """API endpoint for training metrics."""
-    return jsonify(data_manager.get_training_metrics())
+    try:
+        return jsonify(data_manager.get_training_metrics())
+    except Exception as e:
+        logger.error(f"Error in training-metrics endpoint: {e}")
+        return jsonify({"error": "Failed to load training metrics", "results": {}})
 
 @app.route('/api/threat-distribution-chart')
 def threat_distribution_chart():
     """Generate threat distribution chart."""
-    threat_data = data_manager.get_threat_analytics()
-    
-    if not threat_data or 'threat_distribution' not in threat_data:
-        return jsonify({"error": "No threat data available"})
-    
-    distribution = threat_data['threat_distribution']
-    
-    fig = go.Figure(data=[
-        go.Bar(
-            x=list(distribution.keys()),
-            y=list(distribution.values()),
-            marker_color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
+    try:
+        threat_data = data_manager.get_threat_analytics()
+        
+        if not threat_data or 'threat_distribution' not in threat_data:
+            return jsonify({"error": "No threat data available"})
+        
+        distribution = threat_data['threat_distribution']
+        
+        fig = go.Figure(data=[
+            go.Bar(
+                x=list(distribution.keys()),
+                y=list(distribution.values()),
+                marker_color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
+            )
+        ])
+        
+        fig.update_layout(
+            title="Threat Type Distribution",
+            xaxis_title="Threat Type",
+            yaxis_title="Count",
+            template="plotly_white",
+            height=400
         )
-    ])
-    
-    fig.update_layout(
-        title="Threat Type Distribution",
-        xaxis_title="Threat Type",
-        yaxis_title="Count",
-        template="plotly_white",
-        height=400
-    )
-    
-    return jsonify(json.loads(plotly.utils.PlotlyJSONEncoder().encode(fig)))
+        
+        return jsonify(json.loads(plotly.utils.PlotlyJSONEncoder().encode(fig)))
+    except Exception as e:
+        logger.error(f"Error in threat-distribution-chart endpoint: {e}")
+        return jsonify({"error": "Failed to generate threat distribution chart"})
 
 @app.route('/api/soc-metrics-chart')
 def soc_metrics_chart():
     """Generate SOC automation metrics chart."""
-    soc_data = data_manager.get_soc_analytics()
-    
-    if not soc_data or 'automation_metrics' not in soc_data:
-        return jsonify({"error": "No SOC data available"})
-    
-    metrics = soc_data['automation_metrics']
-    
-    fig = make_subplots(
-        rows=1, cols=2,
-        subplot_titles=('Automation vs Manual Actions', 'Workload Reduction'),
-        specs=[[{"type": "pie"}, {"type": "indicator"}]]
-    )
-    
-    # Pie chart for automation vs manual
-    fig.add_trace(
-        go.Pie(
-            labels=['Automated', 'Manual'],
-            values=[metrics.get('automated_actions', 0), metrics.get('manual_actions', 0)],
-            hole=0.4
-        ),
-        row=1, col=1
-    )
-    
-    # Gauge for workload reduction
-    workload_reduction = float(metrics.get('workload_reduction', '0%').replace('%', ''))
-    fig.add_trace(
-        go.Indicator(
-            mode="gauge+number+delta",
-            value=workload_reduction,
-            domain={'x': [0, 1], 'y': [0, 1]},
-            title={'text': "Workload Reduction %"},
-            gauge={
-                'axis': {'range': [None, 100]},
-                'bar': {'color': "darkblue"},
-                'steps': [
-                    {'range': [0, 50], 'color': "lightgray"},
-                    {'range': [50, 80], 'color': "gray"}
-                ],
-                'threshold': {
-                    'line': {'color': "red", 'width': 4},
-                    'thickness': 0.75,
-                    'value': 90
+    try:
+        soc_data = data_manager.get_soc_analytics()
+        
+        if not soc_data or 'automation_metrics' not in soc_data:
+            return jsonify({"error": "No SOC data available"})
+        
+        metrics = soc_data['automation_metrics']
+        
+        fig = make_subplots(
+            rows=1, cols=2,
+            subplot_titles=('Automation vs Manual Actions', 'Workload Reduction'),
+            specs=[[{"type": "pie"}, {"type": "indicator"}]],
+            column_widths=[0.5, 0.5]  # Equal width for both subplots
+        )
+        
+        # Pie chart for automation vs manual
+        fig.add_trace(
+            go.Pie(
+                labels=['Automated', 'Manual'],
+                values=[metrics.get('automated_actions', 0), metrics.get('manual_actions', 0)],
+                hole=0.3,
+                domain={'x': [0, 0.45], 'y': [0, 1]}  # Constrain pie chart to left side
+            ),
+            row=1, col=1
+        )
+        
+        # Gauge for workload reduction
+        workload_reduction = float(metrics.get('workload_reduction', '0%').replace('%', ''))
+        fig.add_trace(
+            go.Indicator(
+                mode="gauge+number",
+                value=workload_reduction,
+                domain={'x': [0.55, 1], 'y': [0.2, 0.8]},  # Constrain gauge to right side
+                title={'text': "Workload Reduction %", 'font': {'size': 14}},
+                gauge={
+                    'axis': {'range': [None, 100]},
+                    'bar': {'color': "darkblue"},
+                    'steps': [
+                        {'range': [0, 50], 'color': "lightgray"},
+                        {'range': [50, 80], 'color': "gray"}
+                    ],
+                    'threshold': {
+                        'line': {'color': "red", 'width': 4},
+                        'thickness': 0.75,
+                        'value': 90
+                    }
                 }
-            }
-        ),
-        row=1, col=2
-    )
-    
-    fig.update_layout(height=400, template="plotly_white")
-    
-    return jsonify(json.loads(plotly.utils.PlotlyJSONEncoder().encode(fig)))
+            ),
+            row=1, col=2
+        )
+        
+        fig.update_layout(
+            height=400, 
+            template="plotly_white",
+            showlegend=True,
+            margin=dict(l=20, r=20, t=40, b=20)
+        )
+        
+        return jsonify(json.loads(plotly.utils.PlotlyJSONEncoder().encode(fig)))
+    except Exception as e:
+        logger.error(f"Error in soc-metrics-chart endpoint: {e}")
+        return jsonify({"error": "Failed to generate SOC metrics chart"})
 
 @app.route('/api/training-progress-chart')
 def training_progress_chart():
     """Generate training progress chart."""
-    training_data = data_manager.get_training_metrics()
-    
-    if not training_data or 'results' not in training_data:
-        return jsonify({"error": "No training data available"})
-    
-    results = training_data['results']
-    
-    tasks = []
-    train_losses = []
-    eval_losses = []
-    accuracies = []
-    
-    for task, metrics in results.items():
-        if 'training_loss' in metrics:
-            tasks.append(task.replace('_', ' ').title())
-            train_losses.append(metrics.get('training_loss', 0))
-            eval_losses.append(metrics.get('eval_loss', 0))
-            accuracies.append(metrics.get('eval_accuracy', 0))
-    
-    fig = make_subplots(
-        rows=2, cols=2,
-        subplot_titles=('Training Loss', 'Validation Loss', 'Accuracy', 'Model Comparison'),
-        specs=[[{"type": "bar"}, {"type": "bar"}],
-               [{"type": "bar"}, {"type": "scatter"}]]
-    )
-    
-    # Training loss
-    fig.add_trace(
-        go.Bar(x=tasks, y=train_losses, name="Training Loss", marker_color='#FF6B6B'),
-        row=1, col=1
-    )
-    
-    # Validation loss
-    fig.add_trace(
-        go.Bar(x=tasks, y=eval_losses, name="Validation Loss", marker_color='#4ECDC4'),
-        row=1, col=2
-    )
-    
-    # Accuracy
-    fig.add_trace(
-        go.Bar(x=tasks, y=accuracies, name="Accuracy", marker_color='#45B7D1'),
-        row=2, col=1
-    )
-    
-    # Model comparison scatter
-    fig.add_trace(
-        go.Scatter(
-            x=eval_losses, y=accuracies, mode='markers+text',
-            text=tasks, textposition="top center",
-            marker=dict(size=12, color='#96CEB4'),
-            name="Loss vs Accuracy"
-        ),
-        row=2, col=2
-    )
-    
-    fig.update_layout(height=600, template="plotly_white", showlegend=False)
-    
-    return jsonify(json.loads(plotly.utils.PlotlyJSONEncoder().encode(fig)))
+    try:
+        training_data = data_manager.get_training_metrics()
+        
+        if not training_data or 'results' not in training_data:
+            return jsonify({"error": "No training data available"})
+        
+        results = training_data['results']
+        
+        tasks = []
+        train_losses = []
+        eval_losses = []
+        accuracies = []
+        
+        for task, metrics in results.items():
+            if 'training_loss' in metrics:
+                tasks.append(task.replace('_', ' ').title())
+                train_losses.append(metrics.get('training_loss', 0))
+                eval_losses.append(metrics.get('eval_loss', 0))
+                accuracies.append(metrics.get('eval_accuracy', 0))
+        
+        fig = make_subplots(
+            rows=2, cols=2,
+            subplot_titles=('Training Loss', 'Validation Loss', 'Accuracy', 'Model Comparison'),
+            specs=[[{"type": "bar"}, {"type": "bar"}],
+                   [{"type": "bar"}, {"type": "scatter"}]]
+        )
+        
+        # Training loss
+        fig.add_trace(
+            go.Bar(x=tasks, y=train_losses, name="Training Loss", marker_color='#FF6B6B'),
+            row=1, col=1
+        )
+        
+        # Validation loss
+        fig.add_trace(
+            go.Bar(x=tasks, y=eval_losses, name="Validation Loss", marker_color='#4ECDC4'),
+            row=1, col=2
+        )
+        
+        # Accuracy
+        fig.add_trace(
+            go.Bar(x=tasks, y=accuracies, name="Accuracy", marker_color='#45B7D1'),
+            row=2, col=1
+        )
+        
+        # Model comparison scatter
+        fig.add_trace(
+            go.Scatter(
+                x=eval_losses, y=accuracies, mode='markers+text',
+                text=tasks, textposition="top center",
+                marker=dict(size=12, color='#96CEB4'),
+                name="Loss vs Accuracy"
+            ),
+            row=2, col=2
+        )
+        
+        fig.update_layout(height=600, template="plotly_white", showlegend=False)
+        
+        return jsonify(json.loads(plotly.utils.PlotlyJSONEncoder().encode(fig)))
+    except Exception as e:
+        logger.error(f"Error in training-progress-chart endpoint: {e}")
+        return jsonify({"error": "Failed to generate training progress chart"})
 
 @app.route('/models')
 def models_page():

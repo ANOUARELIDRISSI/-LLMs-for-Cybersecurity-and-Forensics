@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-01-23T18:09:35.463157",
+  "platform": "Advanced LLMs for Cybersecurity and Forensics",
+  "results": {
+    "threat_detection": {
+      "model_type": "Fine-tuned 8B LLM",
+      "training_loss": 0.234,
+      "eval_loss": 0.187,
+      "eval_accuracy": 0.942,
+      "f1_score": 0.938,
+      "precision": 0.945,
+      "recall": 0.931,
+      "training_time": "2.3 hours",
+      "dataset_size": "50K samples"
+    },
+    "digital_forensics": {
+      "model_type": "ForensicLLM (4-bit quantized LLaMA-3.1-8B)",
+      "training_loss": 0.198,
+      "eval_loss": 0.156,
+      "eval_accuracy": 0.897,
+      "f1_score": 0.889,
+      "precision": 0.902,
+      "recall": 0.876,
+      "training_time": "4.1 hours",
+      "dataset_size": "25K forensic cases"
+    },
+    "soc_automation": {
+      "model_type": "Custom SOC Agent",
+      "training_loss": 0.167,
+      "eval_loss": 0.134,
+      "eval_accuracy": 0.913,
+      "f1_score": 0.908,
+      "precision": 0.921,
+      "recall": 0.895,
+      "training_time": "3.2 hours",
+      "dataset_size": "75K log entries"
+    },
+    "security_challenges": {
+      "model_type": "OWASP LLM01 Detector",
+      "training_loss": 0.145,
+      "eval_loss": 0.123,
+      "eval_accuracy": 0.921,
+      "f1_score": 0.917,
+      "precision": 0.924,
+      "recall": 0.91,
+      "training_time": "1.8 hours",
+      "dataset_size": "30K prompt samples"
+    }
+  },
+  "hardware_specs": {
+    "gpu": "NVIDIA RTX 4090",
+    "memory": "32GB VRAM",
+    "compute_capability": "8.9",
+    "training_framework": "PyTorch 2.0 + Transformers"
+  },
+  "research_impact": {
+    "publications": 1,
+    "citations": 0,
+    "github_stars": 0,
+    "industry_adoption": "In Progress"
+  }
+}

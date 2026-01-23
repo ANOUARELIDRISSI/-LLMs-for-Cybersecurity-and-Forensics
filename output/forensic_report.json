@@ -1,57 +1,69 @@
 {
   "case_info": {
-    "timeline_id": "timeline_20260122_230945",
-    "incident_type": "process",
-    "start_time": "2026-01-22T21:09:45.837856",
-    "end_time": "2026-01-22T22:09:45.837856",
-    "duration": "1:00:00",
-    "total_evidence": 4
+    "timeline_id": "timeline_20260123_180929",
+    "incident_type": "user_activity",
+    "start_time": "2026-01-23T15:09:29.900323",
+    "end_time": "2026-01-23T16:39:29.900323",
+    "duration": "1:30:00",
+    "total_evidence": 5
   },
-  "executive_summary": "Incident timeline spanning 1:00:00 with 4 pieces of evidence. Evidence types: process, network, file_system. Key events: 21:09:45 - system_log; 21:24:45 - network_log; 21:39:45 - file_system;",
+  "executive_summary": "Incident timeline spanning 1:30:00 with 5 pieces of evidence. Evidence types: user_activity, process, file_system, network, memory. Key events: 15:09:29 - endpoint_detection; 15:24:29 - network_monitoring; 15:39:29 - file_integrity_monitoring;",
   "evidence_analysis": {
     "by_type": {
-      "process": 2,
+      "process": 1,
       "network": 1,
-      "file_system": 1
+      "file_system": 1,
+      "memory": 1,
+      "user_activity": 1
     },
     "by_source": {
-      "system_log": 2,
-      "network_log": 1,
-      "file_system": 1
+      "endpoint_detection": 1,
+      "network_monitoring": 1,
+      "file_integrity_monitoring": 1,
+      "memory_analysis": 1,
+      "user_activity_monitoring": 1
     },
     "confidence_distribution": {}
   },
   "timeline_events": [
     {
-      "timestamp": "2026-01-22T21:09:45.837856",
+      "timestamp": "2026-01-23T15:09:29.900323",
       "evidence_id": "EV001",
-      "source": "system_log",
+      "source": "endpoint_detection",
       "type": "process",
-      "summary": "Process malware.exe started with PID 1234 at 14:30:15",
+      "summary": "Malicious process 'svchost.exe' detected with suspicious network connections to C2 server",
       "confidence": 0.0
     },
     {
-      "timestamp": "2026-01-22T21:24:45.837856",
+      "timestamp": "2026-01-23T15:24:29.900323",
       "evidence_id": "EV002",
-      "source": "network_log",
+      "source": "network_monitoring",
       "type": "network",
-      "summary": "Outbound connection to suspicious IP 192.168.1.100:8080",
+      "summary": "Encrypted data exfiltration detected to external IP 203.0.113.42 over HTTPS",
       "confidence": 0.0
     },
     {
-      "timestamp": "2026-01-22T21:39:45.837856",
+      "timestamp": "2026-01-23T15:39:29.900323",
       "evidence_id": "EV003",
-      "source": "file_system",
+      "source": "file_integrity_monitoring",
       "type": "file_system",
-      "summary": "File C:\\temp\\sensitive_data.txt accessed and modified",
+      "summary": "Critical system file C:\\Windows\\System32\\ntdll.dll modified without authorization",
       "confidence": 0.0
     },
     {
-      "timestamp": "2026-01-22T22:09:45.837856",
+      "timestamp": "2026-01-23T16:09:29.900323",
       "evidence_id": "EV004",
-      "source": "system_log",
-      "type": "process",
-      "summary": "Process malware.exe terminated with exit code 0",
+      "source": "memory_analysis",
+      "type": "memory",
+      "summary": "Code injection detected in explorer.exe process memory space",
+      "confidence": 0.0
+    },
+    {
+      "timestamp": "2026-01-23T16:39:29.900323",
+      "evidence_id": "EV005",
+      "source": "user_activity_monitoring",
+      "type": "user_activity",
+      "summary": "Privilege escalation attempt detected - user account elevated to administrator",
       "confidence": 0.0
     }
   ],
@@ -69,47 +81,58 @@
     "EV003": [
       "EV001",
       "EV002",
-      "EV004"
+      "EV004",
+      "EV005"
     ],
     "EV004": [
       "EV001",
       "EV002",
-      "EV003"
+      "EV003",
+      "EV005"
+    ],
+    "EV005": [
+      "EV003",
+      "EV004"
     ]
   },
   "chain_of_custody": [
     {
       "evidence_id": "EV001",
-      "timestamp": "2026-01-22 23:09:45.837856",
+      "timestamp": "2026-01-23 18:09:29.900323",
       "action": "evidence_added",
       "handler": "ForensicLLM_System",
-      "hash": "0d03fa417ee405585b8658c12310cb716216c42d89606ed3f8f27aa365455273"
+      "hash": "950dfda16fb353aa2a570a7ffa7229ad830654a7744a07c4d8563a5830df6dbd"
     },
     {
       "evidence_id": "EV002",
-      "timestamp": "2026-01-22 23:09:45.837856",
+      "timestamp": "2026-01-23 18:09:29.900323",
       "action": "evidence_added",
       "handler": "ForensicLLM_System",
-      "hash": "93649e13f81eb6df1c3dceed7ca233149a5d67dace527ad85d7c00a40605dd11"
+      "hash": "93d780817283dee0030d6019a3d64c072613912a62e57e41766f4f1eeafd3ab6"
     },
     {
       "evidence_id": "EV003",
-      "timestamp": "2026-01-22 23:09:45.837856",
+      "timestamp": "2026-01-23 18:09:29.900323",
       "action": "evidence_added",
       "handler": "ForensicLLM_System",
-      "hash": "b70f4110e2d011f6f746fbec965ddc19a7a32a372e342736a020ed51f75c5d18"
+      "hash": "74414f799d605751aa578b081f9ea7240f52786a35c365461a926947146bda22"
     },
     {
       "evidence_id": "EV004",
-      "timestamp": "2026-01-22 23:09:45.837856",
+      "timestamp": "2026-01-23 18:09:29.900323",
       "action": "evidence_added",
       "handler": "ForensicLLM_System",
-      "hash": "7522b9ed71f92524706e91cf37ed2166caaa5aec757267826335abc754e8e132"
+      "hash": "5a0cba6d9225ea55a15d32624c94983a6eb65ab87169cf85ac5765b14e788970"
+    },
+    {
+      "evidence_id": "EV005",
+      "timestamp": "2026-01-23 18:09:29.900323",
+      "action": "evidence_added",
+      "handler": "ForensicLLM_System",
+      "hash": "80ed4301b51d86e56c2321c942231987e792710003f13e7b2d6bd698ff45e86f"
     }
   ],
   "recommendations": [
-    "Analyze process memory dumps for malicious code",
-    "Review system startup programs and services",
     "Preserve all evidence with proper chain of custody",
     "Document all analysis steps and findings",
     "Consider additional data sources for comprehensive analysis"

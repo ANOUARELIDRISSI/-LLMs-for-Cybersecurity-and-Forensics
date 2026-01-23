@@ -2,18 +2,19 @@
   "summary": {
     "total_analyzed": 8,
     "high_threat_count": 0,
-    "medium_threat_count": 0,
-    "low_threat_count": 8,
-    "average_threat_score": 0.09500000000000001,
-    "max_threat_score": 0.2,
+    "medium_threat_count": 1,
+    "low_threat_count": 7,
+    "average_threat_score": 0.125,
+    "max_threat_score": 0.4,
     "min_threat_score": 0.0
   },
   "threat_distribution": {
-    "social_engineering": 1,
+    "data_exfiltration": 1,
+    "network_attack": 1,
     "unknown": 3,
-    "malware": 2,
-    "zero_day": 1,
-    "data_exfiltration": 1
+    "malware": 1,
+    "social_engineering": 1,
+    "zero_day": 1
   },
   "high_risk_items": []
 }
