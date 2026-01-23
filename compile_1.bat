@@ -1,7 +1,7 @@
 @echo off
-REM Batch script to compile LaTeX report on Windows
+REM Batch script to compile LaTeX report "1.tex" on Windows
 
-echo Compiling Advanced LLMs Cybersecurity Report...
+echo Compiling Advanced LLMs Cybersecurity Report (1.tex)...
 echo.
 
 REM Check if pdflatex is available
@@ -17,7 +17,7 @@ if not exist %PDFLATEX% (
 
 REM First compilation
 echo Running first pdflatex compilation...
-%PDFLATEX% report.tex
+%PDFLATEX% 1.tex
 if %errorlevel% neq 0 (
     echo Error during first compilation
     pause
@@ -26,14 +26,14 @@ if %errorlevel% neq 0 (
 
 REM BibTeX compilation
 echo Running bibtex...
-%BIBTEX% report
+%BIBTEX% 1
 if %errorlevel% neq 0 (
     echo Warning: BibTeX compilation failed, continuing...
 )
 
 REM Second compilation
 echo Running second pdflatex compilation...
-%PDFLATEX% report.tex
+%PDFLATEX% 1.tex
 if %errorlevel% neq 0 (
     echo Error during second compilation
     pause
@@ -42,7 +42,7 @@ if %errorlevel% neq 0 (
 
 REM Third compilation (for cross-references)
 echo Running final pdflatex compilation...
-%PDFLATEX% report.tex
+%PDFLATEX% 1.tex
 if %errorlevel% neq 0 (
     echo Error during final compilation
     pause
@@ -50,15 +50,15 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo Compilation successful! Generated report.pdf
+echo Compilation successful! Generated 1.pdf
 echo.
 
 REM Open PDF if available
-if exist report.pdf (
-    echo Opening report.pdf...
-    start report.pdf
+if exist 1.pdf (
+    echo Opening 1.pdf...
+    start 1.pdf
 ) else (
-    echo Error: report.pdf was not generated
+    echo Error: 1.pdf was not generated
 )
 
 pause

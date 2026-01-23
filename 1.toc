@@ -1,0 +1,52 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Background and Motivation}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Research Objectives}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Key Contributions}{3}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Literature Review and Related Work}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}LLMs in Cybersecurity}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Security Challenges in LLMs}{4}{subsection.2.2}%
+\contentsline {section}{\numberline {3}System Architecture and Design}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Overall Architecture}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Core Components}{5}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Threat Detection Module}{5}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Digital Forensics Module}{5}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}SOC Automation Module}{6}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Security Challenges Module}{6}{subsubsection.3.2.4}%
+\contentsline {section}{\numberline {4}Implementation Details}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Technology Stack}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Model Selection and Training}{6}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Threat Detection Models}{6}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}ForensicLLM Implementation}{7}{subsubsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.3}Dataset Management}{8}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Web Dashboard Implementation}{8}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Dashboard Overview}{8}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Dataset Management Interface}{9}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Threat Analytics and SOC Metrics}{9}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Model Training Progress}{9}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Model Performance Comparison}{10}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}System Monitoring and Logs}{10}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Training Interface}{11}{subsection.5.7}%
+\contentsline {section}{\numberline {6}Experimental Results and Evaluation}{11}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Performance Metrics}{11}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Threat Detection Analysis}{12}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}SOC Automation Results}{12}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Security Challenges Mitigation}{13}{subsection.6.4}%
+\contentsline {section}{\numberline {7}Ethical Considerations and Responsible AI}{13}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Dual-Use Dilemma}{13}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Bias and Fairness}{13}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Accountability Framework}{14}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Future Research Directions}{14}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Short-Term Objectives (1-2 Years)}{14}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Medium-Term Goals (2-3 Years)}{14}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Long-Term Vision (3+ Years)}{14}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Conclusion}{14}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Key Achievements}{15}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Research Contributions}{15}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Impact and Significance}{15}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Future Outlook}{15}{subsection.9.4}%
+\contentsline {section}{\numberline {A}Code Repository Structure}{16}{appendix.A}%
+\contentsline {section}{\numberline {B}Installation and Usage Guide}{17}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}System Requirements}{17}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Installation Steps}{17}{subsection.B.2}%
+\contentsline {section}{\numberline {C}Performance Benchmarks}{18}{appendix.C}%

@@ -86,7 +86,7 @@ This project aims to address four fundamental research objectives:
     \item \textbf{Outline future research} opportunities and technological roadmaps
 \end{enumerate}
 
-\subsection{Contributions}
+\subsection{Key Contributions}
 
 Our key contributions include:
 
@@ -126,17 +126,6 @@ The OWASP Top 10 for LLM Applications \cite{owasp2023llm} identifies critical se
 \end{enumerate}
 
 Our implementation specifically addresses LLM01 through comprehensive prompt injection detection mechanisms.
-
-\subsection{Digital Forensics and AI}
-
-Traditional digital forensics relies heavily on manual analysis and rule-based tools. Recent research has explored AI-enhanced forensics including:
-
-\begin{itemize}
-    \item Automated evidence correlation using machine learning
-    \item Timeline reconstruction through natural language processing
-    \item Memory forensics analysis with deep learning models
-    \item Chain of custody maintenance through blockchain integration
-\end{itemize}
 
 \section{System Architecture and Design}
 
@@ -343,32 +332,84 @@ LogHub Datasets & LogPAI & System and security logs \\
 \label{tab:datasets}
 \end{table}
 
-The dataset downloader automatically retrieves and processes these datasets:
+\section{Web Dashboard Implementation}
 
-\begin{lstlisting}[language=Python, caption=Dataset Download Implementation]
-class DatasetDownloader:
-    def __init__(self, data_dir="data"):
-        self.data_dir = Path(data_dir)
-        self.datasets = {
-            "malware_samples": {
-                "url": "https://github.com/ytisf/theZoo/archive/refs/heads/master.zip",
-                "description": "Malware samples for analysis",
-                "extract_to": "malware"
-            },
-            "threat_intelligence": {
-                "url": "https://raw.githubusercontent.com/MISP/misp-galaxy/main/clusters/threat-actor.json",
-                "description": "MISP threat actor intelligence",
-                "extract_to": "threat_intel"
-            }
-            # Additional datasets...
-        }
-    
-    def download_all(self):
-        results = {}
-        for dataset_name in self.datasets:
-            results[dataset_name] = self.download_dataset(dataset_name)
-        return results
-\end{lstlisting}
+\subsection{Dashboard Overview}
+
+The web dashboard provides comprehensive monitoring and analysis capabilities through a responsive Flask-based interface. Figure \ref{fig:dashboard} shows the main dashboard interface.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/dashboard.png}
+\caption{Main Dashboard Interface}
+\label{fig:dashboard}
+\end{figure}
+
+\subsection{Dataset Management Interface}
+
+The dataset management interface allows users to monitor and download cybersecurity datasets. Figure \ref{fig:datasets} illustrates the dataset status and management capabilities.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/ba00datasets.png}
+\caption{Dataset Management Interface}
+\label{fig:datasets}
+\end{figure}
+
+\subsection{Threat Analytics and SOC Metrics}
+
+The dashboard provides real-time visualization of threat distribution and SOC automation metrics. Figure \ref{fig:threat_soc} shows the interactive charts for threat analysis and automation performance.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/threat distribution and soc automation metrics.png}
+\caption{Threat Distribution and SOC Automation Metrics}
+\label{fig:threat_soc}
+\end{figure}
+
+\subsection{Model Training Progress}
+
+The system provides comprehensive monitoring of model training progress and performance metrics. Figure \ref{fig:training} displays the training progress visualization.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/model training progress.png}
+\caption{Model Training Progress Monitoring}
+\label{fig:training}
+\end{figure}
+
+\subsection{Model Performance Comparison}
+
+Figure \ref{fig:comparison} shows the comparative analysis of different models used in the system, including performance metrics and accuracy comparisons.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/model comparaisaon.png}
+\caption{Model Performance Comparison}
+\label{fig:comparison}
+\end{figure}
+
+\subsection{System Monitoring and Logs}
+
+The dashboard includes real-time system monitoring capabilities, showing recent threats and system logs. Figure \ref{fig:monitoring} illustrates the monitoring interface.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/recent threats and system logs.png}
+\caption{Recent Threats and System Logs Monitoring}
+\label{fig:monitoring}
+\end{figure}
+
+\subsection{Training Interface}
+
+The system provides an intuitive interface for initiating model training processes. Figure \ref{fig:train_interface} shows the training initiation interface.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/train models start training .png}
+\caption{Model Training Interface}
+\label{fig:train_interface}
+\end{figure}
 
 \section{Experimental Results and Evaluation}
 
@@ -462,41 +503,6 @@ Social Engineering & 89.1\% & Behavioral analysis \\
 \caption{Security Challenge Mitigation Results}
 \label{tab:security_results}
 \end{table}
-
-\section{Web Dashboard Implementation}
-
-\subsection{Dashboard Architecture}
-
-The web dashboard provides real-time monitoring and analysis capabilities through a responsive Flask-based interface:
-
-\begin{lstlisting}[language=Python, caption=Dashboard API Implementation]
-@app.route('/api/system-status')
-def system_status():
-    try:
-        return jsonify(data_manager.get_system_status())
-    except Exception as e:
-        logger.error(f"Error in system-status endpoint: {e}")
-        return jsonify({"error": "Failed to load system status"})
-
-@app.route('/api/threat-analytics')
-def threat_analytics():
-    try:
-        return jsonify(data_manager.get_threat_analytics())
-    except Exception as e:
-        logger.error(f"Error in threat-analytics endpoint: {e}")
-        return jsonify({"error": "Failed to load threat analytics"})
-\end{lstlisting}
-
-\subsection{Visualization Components}
-
-The dashboard includes interactive visualizations using Plotly.js:
-
-\begin{itemize}
-    \item \textbf{Threat Distribution Charts}: Real-time threat type analysis
-    \item \textbf{SOC Metrics Dashboards}: Automation rates and workload reduction
-    \item \textbf{Training Progress Monitors}: Model performance tracking
-    \item \textbf{System Status Indicators}: Module health and dataset availability
-\end{itemize}
 
 \section{Ethical Considerations and Responsible AI}
 
